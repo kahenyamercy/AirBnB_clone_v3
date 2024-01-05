@@ -113,3 +113,42 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get_existing_object(self):
+        """Test the get method for retrieving an existing object"""
+        storage = FileStorage()
+        instance = BaseModel()
+        instance_key = f"{instance.__class__.__name__}.{instance.id}"
+        storage._FileStorage__objects[instance_key] = instance
+        result = storage.get(BaseModel, instance.id)
+        self.assertEqual(result, instance)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get_non_existing_object(self):
+        """Test the get method for a non-existing object"""
+        storage = FileStorage()
+        result = storage.get(BaseModel, "non_existing_id")
+        self.assertIsNone(result)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_all_objects(self):
+        """Test the count method for all objects"""
+        storage = FileStorage()
+        instance1 = BaseModel()
+        instance2 = Amenity()
+        storage._FileStorage__objects[f"{instance1.__class__.__name__}.{instance1.id}"] = instance1
+        storage._FileStorage__objects[f"{instance2.__class__.__name__}.{instance2.id}"] = instance2
+        result = storage.count()
+        self.assertEqual(result, 2)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_objects_of_specific_class(self):
+        """Test the count method for objects of a specific class"""
+        storage = FileStorage()
+        instance1 = BaseModel()
+        instance2 = Amenity()
+        storage._FileStorage__objects[f"{instance1.__class__.__name__}.{instance1.id}"] = instance1
+        storage._FileStorage__objects[f"{instance2.__class__.__name__}.{instance2.id}"] = instance2
+        result = storage.count(Amenity)
+        self.assertEqual(result, 1)
