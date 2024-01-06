@@ -3,7 +3,7 @@
 Module to define all api routes for State
 """
 from api.v1.views import app_views
-from flask import jsonify
+from flask import jsonify, abort
 from models import storage
 from models.state import State
 
@@ -20,3 +20,18 @@ def get_states():
     for value in states.values():
         serialized_states.append(value.to_dict())
     return jsonify(serialized_states)
+
+
+# Get State object
+@app_views.route('/states/<state_id>', methods=['GET'])
+def get_state(state_id):
+    """
+    Gets State object
+    Return:
+        (dict): a State object
+    """
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+    print(state)
+    return jsonify(state.to_dict())
