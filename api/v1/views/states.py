@@ -3,7 +3,7 @@
 Module to define all api routes for State
 """
 from api.v1.views import app_views
-from flask import jsonify, abort
+from flask import jsonify, abort, request
 from models import storage
 from models.state import State
 
@@ -50,4 +50,31 @@ def delete_state(state_id):
         abort(404)
     print(state)
     storage.delete(state)
+    storage.save()
     return jsonify({}), 200
+
+
+# Create State
+@app_views.route('/states', methods=['POST'])
+def create_state():
+    """
+    Create a State item
+
+    Return:
+        (dict): new state with the status code 201
+    """
+    try:
+        data = request.get_json()
+    except Exception as e:
+        abort(400, description="Not a JSON")
+
+    if 'name' not in data:
+        abort(400, description="Missing name")
+    
+    new_state = State(**data)
+
+    # Add state obj to the database
+    storage.new(new_state)
+    storage.save()
+
+    return jsonify(new_state.to_dict()), 201
