@@ -50,5 +50,4 @@ def delete_state(state_id):
         abort(404)
     print(state)
     storage.delete(state)
-    storage.reload()
     return jsonify({}), 200
