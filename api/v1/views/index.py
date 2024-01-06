@@ -9,6 +9,8 @@ from models.amenity import Amenity
 from models.city import City
 from models.place import Place
 from models.user import User
+from models.review import Review
+from models.state import State
 
 
 @app_views.route('/status', methods=['GET'])
@@ -36,6 +38,6 @@ def stats():
             "places": places,
             "reviews": reviews,
             "states": states,
-            "users": user
+            "users": users
         }
     return jsonify(stats)
