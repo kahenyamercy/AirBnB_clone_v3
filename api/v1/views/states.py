@@ -48,7 +48,6 @@ def delete_state(state_id):
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
-    print(state)
     storage.delete(state)
     storage.save()
     return jsonify({}), 200
@@ -78,3 +77,27 @@ def create_state():
     storage.save()
 
     return jsonify(new_state.to_dict()), 201
+
+
+# Update State
+@app_views.route('/states/<state_id>', methods=['PUT'])
+def update_state(state_id):
+    """
+    Updates a State item
+    Args:
+        state_id (str): state's id
+    Returns:
+        (dict): state object with the status code 200
+    """
+    try:
+        data = request.get_json()
+    except Exception as e:
+        abort(400, description="Not a JSON")
+
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+
+    state.name = data['name']
+    state.save()
+    return jsonify(state.to_dict()), 200
