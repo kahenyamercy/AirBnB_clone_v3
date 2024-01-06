@@ -66,6 +66,19 @@ test_db_storage.py'])
                              "{:s} method needs a docstring".format(func[0]))
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
+    def test_db_storage_get_method(self):
+        """Test the get method in DBStorage"""
+        self.assertIsNot(DBStorage.get.__doc__, None,
+                         "DBStorage get method needs a docstring")
+        self.assertTrue(len(DBStorage.get.__doc__) >= 1,
+                        "DBStorage get method needs a docstring")
+
+    def test_db_storage_count_method(self):
+        """Test the count method in DBStorage"""
+        self.assertIsNot(DBStorage.count.__doc__, None,
+                         "DBStorage count method needs a docstring")
+        self.assertTrue(len(DBStorage.count.__doc__) >= 1,
+                        "DBStorage cunt method neds a docstring")
 
 
 class TestFileStorage(unittest.TestCase):
@@ -86,3 +99,11 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test the get method for retrieving an existing object"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test the count method for all objects"""
