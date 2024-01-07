@@ -10,3 +10,4 @@ from api.v1.views.index import status, stats
 from api.v1.views.states import get_states, get_state, delete_state, create_state
 from api.v1.views.cities import *
 from api.v1.views.amenities import *
+from api.v1.views.users import *
