@@ -70,8 +70,13 @@ def create_city_state(state_id):
     Create a City of State
 
     Return:
-        (dict): new state with the status code 201
+        (dict): new city with the status code 201
     """
+    # Check is state_id is linked to a state
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+
     try:
         data = request.get_json()
     except Exception as e:
@@ -80,13 +85,13 @@ def create_city_state(state_id):
     if 'name' not in data:
         abort(400, description="Missing name")
 
-    new_state = State(**data)
+    new_city = City(state_id=state_id, **data)
 
-    # Add state obj to the database
-    storage.new(new_state)
+    # Add city obj to the database
+    storage.new(new_city)
     storage.save()
 
-    return jsonify(new_state.to_dict()), 201
+    return jsonify(new_city.to_dict()), 201
 
 
 # Update State
