@@ -91,11 +91,6 @@ def update_amenity(amenity_id):
     Returns:
         (dict): amenity object with the status code 200
     """
-    # Check if amenity_id is linked to an amenity
-    amenity = storage.get(Amenity, amenity_id)
-    if amenity is None:
-        abort(404)
-
     try:
         data = request.get_json()
     except Exception as e:
@@ -103,6 +98,11 @@ def update_amenity(amenity_id):
 
     if 'name' not in data:
         return jsonify({"error": "Missing name"}), 400
+
+    # Check if amenity_id is valid
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
 
     amenity.name = data['name']
     amenity.save()
