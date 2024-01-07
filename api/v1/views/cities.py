@@ -80,10 +80,10 @@ def create_city_state(state_id):
     try:
         data = request.get_json()
     except Exception as e:
-        abort(400, description="Not a JSON")
+        return jsonify({"error": "Not a JSON"}), 400
 
     if 'name' not in data:
-        abort(400, description="Missing name")
+        return jsonify({"error": "Missing name"}), 400
 
     new_city = City(state_id=state_id, **data)
 
@@ -112,10 +112,10 @@ def update_city(city_id):
     try:
         data = request.get_json()
     except Exception as e:
-        abort(400, description="Not a JSON")
+        return jsonify({"error": "Not a JSON"}), 400
 
     if 'name' not in data:
-        abort(400, description="Missing name")
+        return jsonify({"error": "Missing name"}), 400
 
     city.name = data['name']
     city.save()
