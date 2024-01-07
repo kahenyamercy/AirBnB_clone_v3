@@ -71,7 +71,7 @@ def create_state():
     if 'name' not in data:
         return jsonify({"error": "Missing name"}), 400
 
-    new_state = State(**data)
+    new_state = State(name=data['name'])
 
     # Add state obj to the database
     storage.new(new_state)
@@ -99,9 +99,10 @@ def update_state(state_id):
     if state is None:
         abort(404)
 
-    if 'name' not in data:
-        return jsonify({"error": "Missing name"}), 400
-
-    state.name = data['name']
+    # List of attributes not to be updated
+    excluded_attrs = ['id', 'created_at', 'updated_at']
+    for key, value in data.items():
+        if key not in excluded_attrs:
+            setattr(state, key, value)
     state.save()
     return jsonify(state.to_dict()), 200
