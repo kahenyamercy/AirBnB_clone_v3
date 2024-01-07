@@ -72,7 +72,7 @@ def create_amenity():
     if 'name' not in data:
         return jsonify({"error": "Missing name"}), 400
 
-    new_amenity = Amenity(**data)
+    new_amenity = Amenity(name=data['name'])
 
     # Add amenity obj to the database
     storage.new(new_amenity)
@@ -104,6 +104,10 @@ def update_amenity(amenity_id):
     if amenity is None:
         abort(404)
 
-    amenity.name = data['name']
+    # List of attributes not to be updated
+    excluded_attrs = ['id', 'created_at', 'updated_at']
+    for key, value in data.items():
+        if key not in excluded_attrs:
+            setattr(amenity, key, value)
     amenity.save()
     return jsonify(amenity.to_dict()), 200
