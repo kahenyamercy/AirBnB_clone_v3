@@ -76,7 +76,17 @@ def create_user():
     if 'password' not in data:
         return jsonify({"error": "Missing password"}), 400
 
-    new_user = User(**data)
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    user_data = {
+            "email": email,
+            "password": password,
+            "first_name": first_name,
+            "last_name": last_name
+        }
+    new_user = User(**user_data)
 
     # Add user obj to the database
     storage.new(new_user)
