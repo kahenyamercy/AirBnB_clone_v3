@@ -35,6 +35,7 @@ def get_state(state_id):
         abort(404)
     return jsonify(state.to_dict())
 
+
 # Delete State Object
 @app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
@@ -42,7 +43,7 @@ def delete_state(state_id):
     Deletes  a State object
     Args:
         state_id (str): states id
-    Return: 
+    Return:
         (dict): an empty dictionary on successful deletion
     """
     state = storage.get(State, state_id)
@@ -69,7 +70,7 @@ def create_state():
 
     if 'name' not in data:
         abort(400, description="Missing name")
-    
+
     new_state = State(**data)
 
     # Add state obj to the database
