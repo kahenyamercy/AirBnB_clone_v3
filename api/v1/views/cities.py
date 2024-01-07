@@ -104,14 +104,18 @@ def update_city(city_id):
     Returns:
         (dict): city object with the status code 200
     """
+    # Check if city_id is linked to a city
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
+
     try:
         data = request.get_json()
     except Exception as e:
         abort(400, description="Not a JSON")
 
-    city = storage.get(City, city_id)
-    if city is None:
-        abort(404)
+    if 'name' not in data:
+        abort(400, description="Missing name")
 
     city.name = data['name']
     city.save()
