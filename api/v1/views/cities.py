@@ -85,7 +85,7 @@ def create_city_state(state_id):
     if 'name' not in data:
         return jsonify({"error": "Missing name"}), 400
 
-    new_city = City(state_id=state_id, **data)
+    new_city = City(state_id=state_id, name=data['name'])
 
     # Add city obj to the database
     storage.new(new_city)
@@ -114,9 +114,10 @@ def update_city(city_id):
     except Exception as e:
         return jsonify({"error": "Not a JSON"}), 400
 
-    if 'name' not in data:
-        return jsonify({"error": "Missing name"}), 400
-
-    city.name = data['name']
+    # List of attributes that should not be updated
+    excluded_attrs = ['id', 'created_at', 'updated_at']
+    for key, value in data.items():
+        if key not in excluded_attrs:
+            setattr(city, key, value)
     city.save()
     return jsonify(city.to_dict()), 200
