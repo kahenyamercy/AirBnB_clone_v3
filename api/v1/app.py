@@ -32,4 +32,4 @@ def not_found(error):
 if __name__ == "__main__":
     api_host = os.getenv("HBNB_API_HOST", "0.0.0.0")
     api_port = int(os.getenv("HBNB_API_PORT", 5000))
-    app.run(host=api_host, port=api_port)
+    app.run(host=api_host, port=api_port, threaded=True)
