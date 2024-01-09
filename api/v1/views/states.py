@@ -55,7 +55,7 @@ def delete_state(state_id):
 
 
 # Create State
-@app_views.route('/states', methods=['POST'])
+@app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
     """
     Create a State item
@@ -71,7 +71,7 @@ def create_state():
     if 'name' not in data:
         return jsonify({"error": "Missing name"}), 400
 
-    new_state = State(name=data['name'])
+    new_state = State(**data)
 
     # Add state obj to the database
     storage.new(new_state)
