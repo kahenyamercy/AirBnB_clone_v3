@@ -13,7 +13,7 @@ from models.review import Review
 from models.state import State
 
 
-@app_views.route('/status', methods=['GET'])
+@app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status():
     """
     Tests whether the api is working
